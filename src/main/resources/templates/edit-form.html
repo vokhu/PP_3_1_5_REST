@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit form</title>
+</head>
+<body>
+<form th:method="POST" th:action="@{/admin/{id}(id=${user.getId()})}" th:object="${user}">
+    <label for="id">Id</label>
+    <input readonly type="number" th:field="*{id}" id="id">
+    <br>
+    <label for="firstName">Firstname</label>
+    <input type="text" th:field="*{firstName}" id="firstName">
+    <div style="color: darkred" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">FN</div>
+    <br>
+    <label for="lastName">Lastname</label>
+    <input type="text" th:field="*{lastName}" id="lastName">
+    <div style="color: darkred" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">LN</div>
+    <br>
+    <label for="age">Age</label>
+    <input type="text" th:field="*{age}" id="age">
+    <div style="color: darkred " th:if="${#fields.hasErrors('age')}" th:errors="*{age}">AG</div>
+    <br>
+    <label for="password">Password</label>
+    <input type="text" th:field="*{password}" id="password">
+    <br>
+    <label for="userName">Username</label>
+    <input type="text" th:field="*{userName}" id="userName">
+    <div style="color: darkred" th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}">UN</div>
+    <button type="submit">Done!</button>
+    <br><br>
+
+</form>
+<a th:href="@{/logout}">Logout</a>
+</body>
+</html>

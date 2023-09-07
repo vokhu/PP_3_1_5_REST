@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User-info</title>
+</head>
+<body>
+    <h2>Your info</h2>
+    <div>
+        <table>
+            <tr style="color:darkolivegreen">
+                <th>Id</th>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>Age</th>
+            </tr>
+            <tr>
+                <td th:text="${userinf.getId()}">Id</td>
+                <td th:text="*{userinf.getFirstName()}">Firstname</td>
+                <td th:text="${userinf.getLastName()}">Lastname</td>
+                <td th:text="${userinf.getAge()}">Age</td>
+                <td th:text="${userinf.getUserName()}">Username</td>
+                <td th:text="${userinf.getPassword()}">Password</td>
+                <br>
+                <td>
+                    <a th:href="@{/logout}">Logout</a>
+                </td>
+                <br>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
