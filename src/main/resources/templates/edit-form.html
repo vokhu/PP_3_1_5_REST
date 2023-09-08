@@ -28,6 +28,12 @@
     <input type="text" th:field="*{userName}" id="userName">
     <div style="color: darkred" th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}">UN</div>
     <button type="submit">Done!</button>
+    <br>
+    <select multiple name="listRoles[]" required="required">
+        <!--        <option disabled> </option>-->
+        <option value="ROLE_ADMIN">ADMIN</option>
+        <option value="ROLE_USER">USER</option>
+    </select>
     <br><br>
 
 </form>

@@ -13,21 +13,21 @@
                 <th>Firstname</th>
                 <th>Lastname</th>
                 <th>Age</th>
+                <th>Login</th>
+                <th>Password</th>
+                <th>Role</th>
             </tr>
             <tr>
                 <td th:text="${userinf.getId()}">Id</td>
-                <td th:text="*{userinf.getFirstName()}">Firstname</td>
+                <td th:text="${userinf.getFirstName()}">Firstname</td>
                 <td th:text="${userinf.getLastName()}">Lastname</td>
                 <td th:text="${userinf.getAge()}">Age</td>
                 <td th:text="${userinf.getUserName()}">Username</td>
                 <td th:text="${userinf.getPassword()}">Password</td>
-                <br>
-                <td>
-                    <a th:href="@{/logout}">Logout</a>
-                </td>
-                <br>
+                <td th:text="${userinf.getAuthorities()}"></td>
             </tr>
         </table>
+        <a th:href="@{/logout}">Logout</a>
     </div>
 </body>
 </html>

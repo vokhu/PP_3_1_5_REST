@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
@@ -14,6 +15,8 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Controller
 public class UserController {
@@ -27,15 +30,14 @@ public class UserController {
     public String printWelcome(ModelMap model) {
         List<String> messages = new ArrayList<>();
         messages.add("Hello!");
-        messages.add("I'm Spring MVC application");
-        messages.add("5.2.0 version by sep'19 ");
+        messages.add("Well done!");
         model.addAttribute("messages", messages);
         return "test";
     }
 
     @GetMapping(value = "/user")
     public String userInfo (Model model, Principal principal) {
-        User userInf = (User)userService.loadUserByUsername(principal.getName());
+        User userInf = userService./*loadUserByUsername*/findByUsername(principal.getName());
         model.addAttribute("userinf", userInf);
         return "user-info";
     }
@@ -53,10 +55,13 @@ public class UserController {
     }
 
     @PostMapping("/admin/{id}")
-    public String updateDb(@ModelAttribute("user")@Valid User upduser, BindingResult bindingResult/*, @PathVariable("id") int id*/) {
+    public String updateDb(@ModelAttribute("user")@Valid User upduser, BindingResult bindingResult,
+                           @RequestParam(name = "listRoles[]", required = false) String... roles) {
         if(bindingResult.hasErrors()){
             return "edit-form";
         }
+        Set<Role> roleSet = userService.getSetRoles(roles);
+        upduser.setRoles(roleSet);
         userService.updUser(upduser);
         return "redirect:/admin";
     }
@@ -74,10 +79,13 @@ public class UserController {
 
 
     @PostMapping("admin/add")
-    public String addNew(@ModelAttribute("user") @Valid User newUser, BindingResult bindingResult) {
+    public String addNew(@ModelAttribute("user") @Valid User newUser, BindingResult bindingResult,
+                         @RequestParam(name = "listRoles[]", required = false) String... roles) {
         if(bindingResult.hasErrors()) {
             return "new-form";
         }
+        Set<Role> roleSet = userService.getSetRoles(roles);
+        newUser.setRoles(roleSet);
         userService.addNewUser(newUser);
         return "redirect:/admin";
     }

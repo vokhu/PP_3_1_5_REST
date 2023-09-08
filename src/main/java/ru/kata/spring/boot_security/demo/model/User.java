@@ -1,13 +1,13 @@
 package ru.kata.spring.boot_security.demo.model;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name="usersecure")
@@ -40,35 +40,36 @@ public class User implements UserDetails {
     private int age;
 
     @Column
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE} )
+    @Fetch(FetchMode.JOIN)
     @JoinTable(name="user_role",
         joinColumns = @JoinColumn(name="user_id"),
         inverseJoinColumns = @JoinColumn(name="role_id"))
-    private Set<Role> roleSet;
+    private Set<Role> roles=new HashSet<>();
 
     public User() {
     }
 
-    public User(int id, String userName, String password, String firstName, String lastName, int age, Set<Role> roleSet) {
+    public User(int id, String userName, String password, String firstName, String lastName, int age, Set<Role> roles) {
         this.id = id;
         this.userName = userName;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
-        this.roleSet = roleSet;
+        this.roles = roles;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public Set<Role> getRoleSet() {
-        return roleSet;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setRoleSet(Set<Role> roleSet) {
-        this.roleSet = roleSet;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public int getId() {
@@ -112,21 +113,8 @@ public class User implements UserDetails {
     }
 
     @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", age=" + age +
-                ", roleSet=" + roleSet +
-                '}';
-    }
-
-    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roleSet;
+        return roles;
     }
 
     @Override
@@ -157,5 +145,31 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", age=" + age +
+                ", roles=" + roles +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(userName, user.userName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userName);
     }
 }
