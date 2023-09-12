@@ -2,6 +2,9 @@ package ru.kata.spring.boot_security.demo.dao;
 
 
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 import ru.kata.spring.boot_security.demo.model.Role;
@@ -15,13 +18,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Repository
-public class UserDAOImpl implements UserDAO {
+public interface UserDAOImpl extends JpaRepository <User, Integer> {
 
-    @PersistenceContext
+    @Query("SELECT u FROM User u left join fetch u.roles where u.userName = :username")
+    public User findByUsername(@Param("username") String username);
+
+
+   /* @PersistenceContext
     private EntityManager entityManager;
+*/
 
-
-    @Override
+/*    @Override
     public List<User> getAll() {
         return entityManager.createQuery("select u from User u", User.class).getResultList();
     }
@@ -66,6 +73,6 @@ public class UserDAOImpl implements UserDAO {
                 .setParameter("roles", Arrays.asList(roles))
                 .getResultStream().collect(Collectors.toSet());
         return roleSet;
-    }
+    }*/
 
 }
