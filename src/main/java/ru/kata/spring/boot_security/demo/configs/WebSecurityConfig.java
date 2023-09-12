@@ -12,14 +12,14 @@ import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    private final UserServiceImpl userServiceImpl;       /*UserDetailsService userDetailsService;*/
+    private final UserServiceImpl userServiceImpl;
     private final SuccessUserHandler successUserHandler;
 
     private final Password password;
 
     public WebSecurityConfig(SuccessUserHandler successUserHandler, UserServiceImpl userServiceImpl, Password password) /*UserDetailsService userDetailsService)*/ {
         this.successUserHandler = successUserHandler;
-        this.userServiceImpl= userServiceImpl; /*userDetailsService = userDetailsService;*/
+        this.userServiceImpl = userServiceImpl;
         this.password = password;
     }
 
@@ -27,9 +27,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/login").permitAll()
-                .antMatchers("admin/**").hasRole("ADMIN")
-                .antMatchers("user/**").hasAnyRole("ADMIN","USER")
+                //.antMatchers("/login").permitAll()
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/user/**").access("hasAnyRole('ADMIN','USER')")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().successHandler(successUserHandler)
@@ -50,7 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-    // аутентификация inMemory
+    // аутентификация inMemory. В данном решении не используется
 /*    @Bean
     @Override
     public UserDetailsService userDetailsService() {

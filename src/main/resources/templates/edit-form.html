@@ -29,10 +29,11 @@
     <div style="color: darkred" th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}">UN</div>
     <button type="submit">Done!</button>
     <br>
-    <select multiple name="listRoles[]" required="required">
-        <!--        <option disabled> </option>-->
-        <option value="ROLE_ADMIN">ADMIN</option>
-        <option value="ROLE_USER">USER</option>
+    <label for="roles">Roles</label>
+    <select multiple="multiple" th:field="*{roles}" id="roles" required="required">
+        <option th:each="role : ${userroles}"
+                th:value="${role.getId}"
+                th:text="${role.getRoleName}"></option>
     </select>
     <br><br>
 

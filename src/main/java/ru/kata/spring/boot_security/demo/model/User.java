@@ -10,7 +10,8 @@ import javax.validation.constraints.*;
 import java.util.*;
 
 @Entity
-@Table(name="usersecure")
+
+@Table(name = "usersecure")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +19,7 @@ public class User implements UserDetails {
     private int id;
 
     @NotEmpty
-    @Column(name="user_name", unique = true, nullable = false)
+    @Column(name = "user_name", unique = true, nullable = false)
     @Email
     private String userName;
 
@@ -32,7 +33,7 @@ public class User implements UserDetails {
     private String firstName;
     @NotEmpty(message = "Enter Family name")
     @Size(min = 2, max = 20, message = "Min and Max length between 2 and 20")
-    @Column(name="last_name")
+    @Column(name = "last_name")
     private String lastName;
 
     @Min(value = 0, message = "Age can't be lower than 0")
@@ -40,12 +41,12 @@ public class User implements UserDetails {
     private int age;
 
     @Column
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE} )
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @Fetch(FetchMode.JOIN)
-    @JoinTable(name="user_role",
-        joinColumns = @JoinColumn(name="user_id"),
-        inverseJoinColumns = @JoinColumn(name="role_id"))
-    private Set<Role> roles=new HashSet<>();
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
     }
@@ -58,6 +59,9 @@ public class User implements UserDetails {
         this.lastName = lastName;
         this.age = age;
         this.roles = roles;
+    }
+
+    public User(String userName, String password, Collection<? extends GrantedAuthority> authorities) {
     }
 
     public void setPassword(String password) {

@@ -3,7 +3,6 @@ package ru.kata.spring.boot_security.demo.model;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -42,6 +41,7 @@ public class Role implements GrantedAuthority {
     public void setUserSet(Set<User> userSet) {
         this.userSet = userSet;
     }
+
     public int getId() {
         return id;
     }
