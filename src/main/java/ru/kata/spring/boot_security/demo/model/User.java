@@ -1,5 +1,7 @@
 package ru.kata.spring.boot_security.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,7 +20,7 @@ public class User implements UserDetails {
     @Column(name = "id")
     private int id;
 
-    @NotEmpty
+    @NotEmpty(message = "Enter Username")
     @Column(name = "user_name", unique = true, nullable = false)
     @Email
     private String userName;
@@ -27,7 +29,7 @@ public class User implements UserDetails {
     @Column
     private String password;
 
-    //@NotEmpty(message = "Enter name")
+    @NotEmpty(message = "Enter name")
     @Size(min = 2, max = 20, message = "Min and Max length between 2 and 20")
     @Column(name = "first_name")
     private String firstName;
@@ -46,18 +48,20 @@ public class User implements UserDetails {
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>();
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
+    private Set<Role> roles;
 
     public User() {
     }
 
-    public User(int id, String userName, String password, String firstName, String lastName, int age, Set<Role> roles) {
+    public User(int id, String userName, String firstName, String lastName, int age, String password) {
         this.id = id;
         this.userName = userName;
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
-        this.roles = roles;
         this.password = password;
     }
 
@@ -176,4 +180,14 @@ public class User implements UserDetails {
     public int hashCode() {
         return Objects.hash(userName);
     }
+
+    public String getRolesToString() {
+        StringBuilder joiner = new StringBuilder();
+        for (Role role : roles) {
+            joiner.append(role.toString()).append("\n");
+        }
+        String result = joiner.toString();
+        return result;
+    }
+
 }

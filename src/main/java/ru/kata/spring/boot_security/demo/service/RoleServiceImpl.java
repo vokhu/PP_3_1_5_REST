@@ -22,23 +22,4 @@ public class RoleServiceImpl implements RoleService {
     public List<Role> getAllRoles() {
         return roleRep.findAll();
     }
-
-    @Override
-    @Transactional
-    public void saveRole(Role role) {
-        roleRep.save(role);
-    }
-
-    @Override
-    public Role getRoleById(int id) {
-        Optional<Role> roleById = roleRep.findById(id);
-        return roleById.orElse(null);
-    }
-
-    @Override
-    public Role getRole(String roleName) {
-        return null;
-    }
-
-
 }
